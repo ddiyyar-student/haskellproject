@@ -34,8 +34,9 @@ addCustomer system newCustomer = system { customers = customers system ++ [newCu
 -- -- Returns a movie from a customer (returns error if movie is not rented) 
 -- returnMovie :: RentalSystem -> Int -> Int -> Either String RentalSystem 
 
--- -- Lists all available movies 
--- listAvailableMovies :: RentalSystem -> [Movie] 
+-- Lists all available movies 
+listAvailableMovies :: RentalSystem -> [Movie]
+listAvailableMovies system = filter (\m -> not (isRented m)) (movies system)
 
 -- -- Finds movies by genre using a predicate (custom higher-order function) 
 -- findMoviesBy :: (Movie -> Bool) -> RentalSystem -> [Movie] 
@@ -45,4 +46,16 @@ addCustomer system newCustomer = system { customers = customers system ++ [newCu
 
 main :: IO ()
 main = do
-    putStrLn "Success?"
+    let alice = Customer { customerId = 1, name = "Alice", rentedMovies = [] }
+    let bob = Customer { customerId = 2, name = "Bob", rentedMovies = [2] }
+    let charlie = Customer { customerId = 3, name = "Charlie", rentedMovies = [] }
+    let customers = [alice, bob, charlie]
+
+    let movie1 = Movie { movieId = 1, title = "Inception", genre = SciFi, isRented = False }
+    let movie2 = Movie { movieId = 2, title = "The Dark Knight", genre = Action, isRented = True }
+    let movies = [movie1, movie2]
+
+    let system = RentalSystem { movies = movies, customers = customers }
+
+    putStrLn "Initial Rental System:"
+    print system
