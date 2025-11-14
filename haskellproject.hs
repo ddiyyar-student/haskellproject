@@ -38,8 +38,9 @@ addCustomer system newCustomer = system { customers = customers system ++ [newCu
 listAvailableMovies :: RentalSystem -> [Movie]
 listAvailableMovies system = filter (\m -> not (isRented m)) (movies system)
 
--- -- Finds movies by genre using a predicate (custom higher-order function) 
--- findMoviesBy :: (Movie -> Bool) -> RentalSystem -> [Movie] 
+-- Finds movies by genre using a predicate (custom higher-order function) 
+findMoviesBy :: (Movie -> Bool) -> RentalSystem -> [Movie]
+findMoviesBy predicate system = filter predicate (movies system)
 
 -- -- Calculates total rented movies count using functors and monads 
 -- totalRentedMovies :: RentalSystem -> Maybe Int
@@ -57,5 +58,5 @@ main = do
 
     let system = RentalSystem { movies = movies, customers = customers }
 
-    putStrLn "Initial Rental System:"
-    print system
+    print $ listAvailableMovies (addMovie system (Movie { movieId = 3, title = "Interstellar", genre = SciFi, isRented = False }))
+    
