@@ -48,9 +48,12 @@ filterByGenre g movie = genre movie == g
 searchingByTitle :: String -> Movie -> Bool
 searchingByTitle t movie = title movie == t
 
--- -- Calculates total rented movies count using functors and monads 
--- totalRentedMovies :: RentalSystem -> Maybe Int
-
+-- Calculates total rented movies count using functors and monads 
+totalRentedMovies :: RentalSystem -> Maybe Int
+totalRentedMovies system = do
+    let list = filter isRented (movies system)
+    return $ length list
+    
 main :: IO ()
 main = do
     let alice = Customer { customerId = 1, name = "Alice", rentedMovies = [] }
@@ -65,12 +68,12 @@ main = do
 
     let movie1 = Movie { movieId = 1, title = "Inception", genre = SciFi, isRented = False }
     let movie2 = Movie { movieId = 2, title = "The Dark Knight", genre = Action, isRented = True }
-    let movie3 = Movie { movieId = 3, title = "Oppenhaimer", genre = Drama, isRented = False }
-    let movie4 = Movie { movieId = 4, title = "Spider Man: Homecoming", genre = SciFi, isRented = True }
+    let movie3 = Movie { movieId = 3, title = "Oppenhaimer", genre = Drama, isRented = True }
+    let movie4 = Movie { movieId = 4, title = "Spider Man: Homecoming", genre = SciFi, isRented = False }
     let movie5 = Movie { movieId = 5, title = "Rocky", genre = Action, isRented = False }
     let movie6 = Movie { movieId = 6, title = "Drammatic Film", genre = Drama, isRented = False }
-    let movie7  = Movie { movieId = 7,  title = "Interstellar", genre = SciFi, isRented = False }
-    let movie8  = Movie { movieId = 8,  title = "Gladiator", genre = Drama, isRented = True }
+    let movie7  = Movie { movieId = 7,  title = "Interstellar", genre = SciFi, isRented = True }
+    let movie8  = Movie { movieId = 8,  title = "Gladiator", genre = Drama, isRented = False }
     let movie9  = Movie { movieId = 9,  title = "Mad Max: Fury Road", genre = Action, isRented = False }
     let movie10 = Movie { movieId = 10, title = "The Matrix", genre = SciFi, isRented = False }
     let movie11 = Movie { movieId = 11, title = "John Wick", genre = Action, isRented = True }
@@ -83,11 +86,5 @@ main = do
 
     let system = RentalSystem { movies = movies, customers = customers }
 
-
-    putStrLn "Testing filterbygenre: "
-    print $ findMoviesBy (filterByGenre SciFi) system
-
-    putStrLn "Testing searchingbytitle"
-    print $ findMoviesBy (searchingByTitle "Interstellar") system
-    -- print $ listAvailableMovies (addMovie system (Movie { movieId = 3, title = "Interstellar", genre = SciFi, isRented = False }))
-    
+    putStrLn "Welcome to the Diyar and Archin Functional Programming project"
+    putStrLn "Menu: 1. "
