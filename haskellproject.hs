@@ -7,6 +7,7 @@ data Movie = Movie
     , title    :: String     -- movie title
     , genre    :: Genre      -- movie genre
     , isRented :: Bool       -- True if currently rented
+    , rating :: Maybe [Int]      -- Movie rating
     } deriving (Show, Eq)
 
 data Customer = Customer
@@ -125,22 +126,22 @@ main = do
     let customers =
             [ alice, bob, charlie, diana, eric, fiona, george, helen ]
 
-    let movie1  = Movie 1  "Inception"              SciFi  False
-    let movie2  = Movie 2  "The Dark Knight"        Action True
-    let movie3  = Movie 3  "Oppenhaimer"            Drama  True
-    let movie4  = Movie 4  "Spider Man: Homecoming" SciFi  False
-    let movie5  = Movie 5  "Rocky"                  Action False
-    let movie6  = Movie 6  "Drammatic Film"         Drama  False
-    let movie7  = Movie 7  "Interstellar"           SciFi  True
-    let movie8  = Movie 8  "Gladiator"              Drama  False
-    let movie9  = Movie 9  "Mad Max: Fury Road"     Action False
-    let movie10 = Movie 10 "The Matrix"             SciFi  False
-    let movie11 = Movie 11 "John Wick"              Action True
-    let movie12 = Movie 12 "Forrest Gump"           Drama  False
-    let movie13 = Movie 13 "The Martian"            SciFi  False
-    let movie14 = Movie 14 "Whiplash"               Drama  False
-    let movie15 = Movie 15 "Avengers: Endgame"      Action True
-    let movie16 = Movie 16 "Tenet"                  SciFi  False
+    let movie1  = Movie 1  "Inception"              SciFi  False Nothing
+    let movie2  = Movie 2  "The Dark Knight"        Action True Nothing
+    let movie3  = Movie 3  "Oppenhaimer"            Drama  True Nothing
+    let movie4  = Movie 4  "Spider Man: Homecoming" SciFi  False Nothing
+    let movie5  = Movie 5  "Rocky"                  Action False Nothing
+    let movie6  = Movie 6  "Drammatic Film"         Drama  False Nothing
+    let movie7  = Movie 7  "Interstellar"           SciFi  True Nothing
+    let movie8  = Movie 8  "Gladiator"              Drama  False Nothing
+    let movie9  = Movie 9  "Mad Max: Fury Road"     Action False Nothing
+    let movie10 = Movie 10 "The Matrix"             SciFi  False Nothing
+    let movie11 = Movie 11 "John Wick"              Action True Nothing
+    let movie12 = Movie 12 "Forrest Gump"           Drama  False Nothing
+    let movie13 = Movie 13 "The Martian"            SciFi  False Nothing
+    let movie14 = Movie 14 "Whiplash"               Drama  False Nothing
+    let movie15 = Movie 15 "Avengers: Endgame"      Action True Nothing
+    let movie16 = Movie 16 "Tenet"                  SciFi  False Nothing
 
     let movies =
             [ movie1, movie2, movie3, movie4, movie5, movie6, movie7
@@ -176,7 +177,7 @@ menu system = do
             genre <- getLine
             let gen = read genre :: Genre
 
-            let newMovie = Movie intID title gen False
+            let newMovie = Movie intID title gen False Nothing
             let newSystem = addMovie system newMovie
 
             putStrLn "Movie added!"
