@@ -32,7 +32,31 @@ addCustomer system newCustomer =
 
 
 -- Rents a movie to a customer (returns error if movie is unavailable)
--- rentMovie :: RentalSystem -> Int -> Int -> Either String RentalSystem
+rentMovie :: RentalSystem -> Int -> Int -> Either String RentalSystem
+rentMovie system cId mId = do
+    -- Find customer
+    customer <- maybe (Left "Error: Customer not found.") Right $
+        find (\c -> customerId c == cId) (customers system)
+
+    -- Find movie
+    movie <- maybe (Left "Error: Movie not found.") Right $
+        find (\m -> movieId m == mId) (movies system)
+
+    -- Check if movie already rented
+    if isRented movie
+        then Left "Error: Movie is already rented."
+        else do
+            -- Updated movie: mark as rented
+            let updatedMovie = movie { isRented = True }
+            let updatedMovies = map (\m -> if movieId m == mId then updatedMovie else m) (movies system)
+
+            -- Updated customer: add movie ID to their list
+            let updatedCustomer = customer { rentedMovies = rentedMovies customer ++ [mId] }
+            let updatedCustomers = map
+                    (\c -> if customerId c == cId then updatedCustomer else c)
+                    (customers system)
+
+            Right $ system { movies = updatedMovies, customers = updatedCustomers }
 
 -- Returns a movie from a customer (returns error if movie is not rented)
 -- returnMovie :: RentalSystem -> Int -> Int -> Either String RentalSystem
