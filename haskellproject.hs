@@ -59,7 +59,31 @@ rentMovie system cId mId = do
             Right $ system { movies = updatedMovies, customers = updatedCustomers }
 
 -- Returns a movie from a customer (returns error if movie is not rented)
--- returnMovie :: RentalSystem -> Int -> Int -> Either String RentalSystem
+returnMovie :: RentalSystem -> Int -> Int -> Either String RentalSystem
+returnMovie system cId mId = do
+    -- Find customer
+    customer <- maybe (Left "Error: Customer not found.") Right $
+        find (\c -> customerId c == cId) (customers system)
+
+    -- Check if customer has rented this movie
+    if mId `notElem` rentedMovies customer
+        then Left "Error: This customer did not rent that movie."
+        else do
+            -- Find movie
+            movie <- maybe (Left "Error: Movie not found.") Right $
+                find (\m -> movieId m == mId) (movies system)
+
+            -- Updated movie: mark as returned
+            let updatedMovie = movie { isRented = False }
+            let updatedMovies = map (\m -> if movieId m == mId then updatedMovie else m) (movies system)
+
+            -- Updated customer: remove movie ID
+            let updatedCustomer = customer { rentedMovies = filter (/= mId) (rentedMovies customer) }
+            let updatedCustomers = map
+                    (\c -> if customerId c == cId then updatedCustomer else c)
+                    (customers system)
+
+            Right $ system { movies = updatedMovies, customers = updatedCustomers }
 
 
 -- Lists all available movies
