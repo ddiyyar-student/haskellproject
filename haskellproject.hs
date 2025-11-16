@@ -194,9 +194,37 @@ menu system = do
 
             putStrLn "Customer added!"
             menu newSystem
+        "3" -> do
+            putStrLn "Enter customer ID:"
+            cStr <- getLine
+            putStrLn "Enter movie ID:"
+            mStr <- getLine
 
-        -- "3" -> do
-        -- "4" -> do
+            let cId = read cStr :: Int
+            let mId = read mStr :: Int
+
+            case rentMovie system cId mId of
+                Left err -> putStrLn err >> menu system
+                Right newSystem -> do
+                    putStrLn "Movie successfully rented!"
+                    menu newSystem
+
+        "4" -> do
+            putStrLn "Enter customer ID:"
+            cStr <- getLine
+            putStrLn "Enter movie ID to return:"
+            mStr <- getLine
+
+            let cId = read cStr :: Int
+            let mId = read mStr :: Int
+
+            case returnMovie system cId mId of
+                Left err -> putStrLn err >> menu system
+                Right newSystem -> do
+                    putStrLn "Movie successfully returned!"
+                    menu newSystem
+
+         
 
         "5" -> do
             putStrLn "Available movies:"
