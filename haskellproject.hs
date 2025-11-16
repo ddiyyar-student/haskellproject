@@ -70,4 +70,121 @@ main = do
     let diana   = Customer 4 "Diana"   [7, 11]
     let eric    = Customer 5 "Eric"    []
     let fiona   = Customer 6 "Fiona"   [3]
-    let george  = Cust
+    let george  = Customer 7 "George"  []
+    let helen   = Customer 8 "Helen"   [15]
+
+    let customers =
+            [ alice, bob, charlie, diana, eric, fiona, george, helen ]
+
+    let movie1  = Movie 1  "Inception"              SciFi  False
+    let movie2  = Movie 2  "The Dark Knight"        Action True
+    let movie3  = Movie 3  "Oppenhaimer"            Drama  True
+    let movie4  = Movie 4  "Spider Man: Homecoming" SciFi  False
+    let movie5  = Movie 5  "Rocky"                  Action False
+    let movie6  = Movie 6  "Drammatic Film"         Drama  False
+    let movie7  = Movie 7  "Interstellar"           SciFi  True
+    let movie8  = Movie 8  "Gladiator"              Drama  False
+    let movie9  = Movie 9  "Mad Max: Fury Road"     Action False
+    let movie10 = Movie 10 "The Matrix"             SciFi  False
+    let movie11 = Movie 11 "John Wick"              Action True
+    let movie12 = Movie 12 "Forrest Gump"           Drama  False
+    let movie13 = Movie 13 "The Martian"            SciFi  False
+    let movie14 = Movie 14 "Whiplash"               Drama  False
+    let movie15 = Movie 15 "Avengers: Endgame"      Action True
+    let movie16 = Movie 16 "Tenet"                  SciFi  False
+
+    let movies =
+            [ movie1, movie2, movie3, movie4, movie5, movie6, movie7
+            , movie8, movie9, movie10, movie11, movie12, movie13
+            , movie14, movie15, movie16
+            ]
+
+    let system = RentalSystem movies customers
+
+    putStrLn "Welcome to the Diyar and Archin Functional Programming project :D"
+    menu system
+
+
+menu :: RentalSystem -> IO ()
+menu system = do
+    putStrLn "Menu: || 1. Add Movie || 2. Add Customer || 3. Rent Movie (in process) ||"
+    putStrLn "|| 4. Return Movie (in process) || 5. List of Available Movies || 6. Filter/Find ||"
+    putStrLn "|| 7. Total Rented Films || 8. Rating of the films (in progress) || 9. Exit ||"
+
+    input <- getLine
+
+    case input of
+
+        "1" -> do
+            putStrLn "Enter new movie ID:"
+            movID <- getLine
+            let intID = read movID :: Int
+
+            putStrLn "Enter title:"
+            title <- getLine
+
+            putStrLn "Enter genre (Action || Comedy || Drama || Horror || SciFi):"
+            genre <- getLine
+            let gen = read genre :: Genre
+
+            let newMovie = Movie intID title gen False
+            let newSystem = addMovie system newMovie
+
+            putStrLn "Movie added!"
+            menu newSystem
+
+        "2" -> do
+            putStrLn "Enter new customer ID:"
+            cID <- getLine
+            let intcID = read cID :: Int
+
+            putStrLn "Enter customer name:"
+            cname <- getLine
+
+            let newCustomer = Customer intcID cname []
+            let newSystem = addCustomer system newCustomer
+
+            putStrLn "Customer added!"
+            menu newSystem
+
+        -- "3" -> do
+        -- "4" -> do
+
+        "5" -> do
+            putStrLn "Available movies:"
+            print (listAvailableMovies system)
+            menu system
+
+        "6" -> do
+            putStrLn "Choose filter:"
+            putStrLn "1. By Genre"
+            putStrLn "2. By Title"
+            choice <- getLine
+
+            case choice of
+                "1" -> do
+                    putStrLn "Enter genre (Action | Comedy | Drama | Horror | SciFi):"
+                    gStr <- getLine
+                    let g = read gStr :: Genre
+                    print $ findMoviesBy (filterByGenre g) system
+                    menu system
+
+                "2" -> do
+                    putStrLn "Enter title:"
+                    t <- getLine
+                    print $ findMoviesBy (searchingByTitle t) system
+                    menu system
+
+        "7" -> do
+            putStrLn "Total rented movies:"
+            print (totalRentedMovies system)
+            menu system
+
+        -- "8" -> do
+
+        "9" -> do
+            putStrLn "Good bye!"
+
+        _ -> do
+            putStrLn "Exception: Wrong key. Try again."
+            menu system
