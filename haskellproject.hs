@@ -1,3 +1,4 @@
+import Data.List (find)
 data Genre = Action | Comedy | Drama | Horror | SciFi
     deriving (Show, Eq, Read)
 
